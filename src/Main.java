@@ -16,6 +16,10 @@ public class Main {
         System.out.println("float значение: " + floatValue);
         double doubleValue = 6.43;
         System.out.println("double значение: " + doubleValue);
+        boolean booleanValue = true;
+        System.out.println("Логическое значение: " + booleanValue);
+        char charValue = 'V';
+        System.out.println("char значение: " + charValue);
         String stringValue = "Это строка";
         System.out.println("String значение: " + stringValue);
 
@@ -40,7 +44,7 @@ public class Main {
         /*
          * Задание 5
          */
-        int a4 = -5;
+        int a4 = 0;
         printIsValuePositive(a4);
 
         /*
