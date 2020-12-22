@@ -1,66 +1,83 @@
 public class Second {
 
     public static void main(String[] args){
-        /*
-         * Задание 1
-         */
+        doFirstTask();
+        doSecondTask();
+        doThirdTask();
+        doFourthTask();
+        doFifthTask();
+        doSixthTask();
+        doSeventhTask();
+    }
+
+    /*
+     * Задание 1
+     */
+    static private void doFirstTask(){
         System.out.println("Задание 1");
-        int[] arr1 = { 1, 0, 1, 1, 1, 0, 0, 0, 1, 0 };
+        int[] arr = { 1, 0, 1, 1, 1, 0, 0, 0, 1, 0 };
 
-        for (int i = 0; i < arr1.length; i++){
-            arr1[i] = arr1[i] == 1 ? 0 : 1;
+        for (int i = 0; i < arr.length; i++){
+            arr[i] = arr[i] == 1 ? 0 : 1;
         }
-        printArray(arr1);
+        printArray(arr);
+    }
 
-
-        /*
-         * Задание 2
-         */
+    /*
+     * Задание 2
+     */
+    static private void doSecondTask(){
         System.out.println("Задание 2");
-        int[] arr2 = new int[8];
-        for (int i = 0; i < arr2.length; i++){
+        int[] arr = new int[8];
+        for (int i = 0; i < arr.length; i++){
             if (i == 0) continue;
-            arr2[i] = arr2[i - 1] + 3;
+            arr[i] = arr[i - 1] + 3;
         }
-        printArray(arr2);
+        printArray(arr);
+    }
 
-        /*
-         * Задание 3
-         */
+    /*
+     * Задание 3
+     */
+    static private void doThirdTask(){
         System.out.println("Задание 3");
-        int[] arr3 = { 1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1 };
-        for (int i = 0; i < arr3.length; i++){
-            if (arr3[i] < 6)
-                arr3[i] = arr3[i] * 2;
+        int[] arr = { 1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1 };
+        for (int i = 0; i < arr.length; i++){
+            if (arr[i] < 6)
+                arr[i] = arr[i] * 2;
         }
-        printArray(arr3);
+        printArray(arr);
+    }
 
-        /*
-         * Задание 4
-         */
+    /*
+     * Задание 4
+     */
+    static private void doFourthTask(){
         System.out.println("Задание 4");
         int len = 7;
-        int[][] arr4 = new int[len][len];
-        for(int i = 0; i < arr4.length; i++){
-            for (int j = 0; j < arr4[i].length; j++){
-                if (j == i)
-                    arr4[i][j] = 1;
+        int[][] arr = new int[len][len];
+        for(int i = 0; i < arr.length; i++){
+            for (int j = 0; j < arr[i].length; j++){
+                if (j == i || j == (len - i - 1))
+                    arr[i][j] = 1;
             }
         }
-        for (int[] el : arr4) {
+        for (int[] el : arr) {
             printArray(el);
         }
+    }
 
-        /*
-         * Задание 5
-         */
+    /*
+     * Задание 5
+     */
+    static private void doFifthTask(){
         System.out.println("Задание 5");
-        int[] arr5 = new int[10];
-        generateRandomArray(arr5, 100);
-        printArray(arr5);
-        int min = arr5[0];
-        int max = arr5[0];
-        for (int el : arr5) {
+        int[] arr = new int[10];
+        generateRandomArray(arr, 100);
+        printArray(arr);
+        int min = arr[0];
+        int max = arr[0];
+        for (int el : arr) {
             if (min > el)
                 min = el;
             if (max < el)
@@ -68,34 +85,38 @@ public class Second {
         }
         System.out.println("Минимальное значение: " + min);
         System.out.println("максимальное значение: " + max);
+    }
 
-        /*
-         * Задание 6
-         */
+    /*
+     * Задание 6
+     */
+    static private void doSixthTask(){
         System.out.println("Задание 6");
-        int[] arr6 = new int[10];
-        generateRandomArray(arr6, 100);
-        printArray(arr6);
-        boolean arrHasBalancePoint = checkBalance(arr6);
+        int[] arr = new int[10];
+        generateRandomArray(arr, 100);
+        printArray(arr);
+        boolean arrHasBalancePoint = checkBalance(arr);
         System.out.println("В масиве есть место, где правая и левая части равны? " + arrHasBalancePoint);
-        int[] arr7 = {2, 2, 2, 1, 2, 2, 10, 1};
-        printArray(arr7);
-        arrHasBalancePoint = checkBalance(arr7);
+        int[] arr1 = {2, 2, 2, 1, 2, 2, 10, 1};
+        printArray(arr1);
+        arrHasBalancePoint = checkBalance(arr1);
         System.out.println("В масиве есть место, где правая и левая части равны? " + arrHasBalancePoint);
+    }
 
-        /*
-         * Задание 7
-         */
+    /*
+     * Задание 7
+     */
+    static private void doSeventhTask(){
         System.out.println("Задание 7");
-        len = 10;
-        int[] arr8 = new int[len];
-        generateRandomArray(arr8, 100);
-        printArray(arr8);
+        int len = 10;
+        int[] arr = new int[len];
+        generateRandomArray(arr, 100);
+        printArray(arr);
         int n = (int)(Math.random() * (len * 2) - len);
         System.out.println("Сдвинуть массив на " + n);
-        moveArrayElement(arr8, n);
+        moveArrayElement(arr, n);
         System.out.println("Сдвинутый массив");
-        printArray(arr8);
+        printArray(arr);
     }
 
 
