@@ -30,7 +30,7 @@ public class Third {
                     System.out.println("Guessed number is smaller");
                 }
             }
-        }while (getInputYesNo("Do you want to play again? (Y/N)"));
+        }while (getInputYesNo("Do you want to play again? (1/0)"));
     }
 
     private static int getInputInt(String message){
@@ -54,19 +54,19 @@ public class Third {
         System.out.println(message);
         boolean success = false;
         Scanner scanner = new Scanner(System.in);
-        String res = "N";
+        int res = 0;
         do {
             try {
-                res = scanner.next();
-                if (res.equals("Y") || res.equals("N")) {
+                res = scanner.nextInt();
+                if (res == 1 || res == 0) {
                     success = true;
                 }
             }
             catch (InputMismatchException ignored){
-                System.out.println("Write Y or N");
+                System.out.println("Write 1 or 0");
             }
         }while (!success);
-        return res.equals("Y");
+        return res == 1;
     }
 
     private static void playGameGuessWord(){
