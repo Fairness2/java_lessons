@@ -75,8 +75,7 @@ public class Third {
         System.out.println("Let's play game Guess Word. We choice one of this words:");
         String[] options = {"apple", "orange", "lemon", "banana", "apricot", "avocado", "broccoli", "carrot", "cherry", "garlic", "grape", "melon", "leak", "kiwi", "mango", "mushroom", "nut", "olive", "pea", "peanut", "pear", "pepper", "pineapple", "pumpkin", "potato"};
         System.out.println(Arrays.toString(options));
-        int wordIndex = random.nextInt(options.length);
-        String word = options[wordIndex];
+        String word = options[random.nextInt(options.length)];
         do {
             System.out.println("Write word");
             String guessedWord = scanner.next().toLowerCase();
@@ -84,17 +83,21 @@ public class Third {
                 System.out.println("It's right answer. You won!");
                 break;
             }
-            StringBuilder res = new StringBuilder();
-            for(int i = 0; i < 15; i++){
-                if (i < word.length() && i < guessedWord.length() && word.charAt(i) == guessedWord.charAt(i)){
-                    res.append(word.charAt(i));
-                }
-                else{
-                    res.append('#');
-                }
-            }
-            System.out.println("Words convergence:");
-            System.out.println(res.toString());
+            buildConvergenceString(word, guessedWord);
         }while (true);
+    }
+
+    private static void buildConvergenceString(String word, String guessedWord){
+        StringBuilder res = new StringBuilder();
+        for(int i = 0; i < 15; i++){
+            if (i < word.length() && i < guessedWord.length() && word.charAt(i) == guessedWord.charAt(i)){
+                res.append(word.charAt(i));
+            }
+            else{
+                res.append('#');
+            }
+        }
+        System.out.println("Words convergence:");
+        System.out.println(res.toString());
     }
 }
