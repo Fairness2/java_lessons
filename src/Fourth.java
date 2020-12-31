@@ -112,39 +112,53 @@ public class Fourth {
         Random rand = new Random();
         int[] winOptions = getWinOptions(matrix, getUserSymbol());
 
-        for (int i = 0; i < winOptions.length; i++){
-            if (winOptions[i] == 4 || (winOptions[i] == 3 && rand.nextBoolean())){
-                if (i == 0){ //Проверяем главную диагоняль
-                    for (int j = 0; j < matrix.length; j++){ //Ищем свободную ячейку
-                        if (checkAvailableCell(j, j, matrix)){
-                            matrix[j][j] = getAISymbol();
-                            return true;
-                        }
-                    }
+        for (int i = 0; i < winOptions.length; i++){ //Блокируем ходы пользователя у которых остался один шаг
+            if (winOptions[i] == getLength() - 1){
+                if (doBlockUserTurn(matrix, i)){
+                    return true;
                 }
-                else if (i == 1){ //Проверяем обратную диагоняль
-                    for (int j = 0; j < matrix.length; j++){//Ищем свободную ячейку
-                        if (checkAvailableCell(j, matrix.length - j - 1, matrix)){
-                            matrix[j][matrix.length - j - 1] = getAISymbol();
-                            return true;
-                        }
-                    }
+            }
+        }
+        for (int i = 0; i < winOptions.length; i++){ //Блокируем ходы пользователя у которых осталось два шага с вероятностью 50%
+            if (winOptions[i] == getLength() - 2 && rand.nextBoolean()){
+                if (doBlockUserTurn(matrix, i)){
+                    return true;
                 }
-                else if (i < 2 + matrix.length){ //Строки
-                    for (int j = 0; j < matrix[i - 2].length; j++){//Ищем свободную ячейку
-                        if (checkAvailableCell(j,i - 2, matrix)){
-                            matrix[i - 2][j] = getAISymbol();
-                            return true;
-                        }
-                    }
+            }
+        }
+        return false;
+    }
+
+    private static boolean doBlockUserTurn(char[][] matrix, int i){
+        if (i == 0){ //Проверяем главную диагоняль
+            for (int j = 0; j < matrix.length; j++){ //Ищем свободную ячейку
+                if (checkAvailableCell(j, j, matrix)){
+                    matrix[j][j] = getAISymbol();
+                    return true;
                 }
-                else{
-                    for (int j = 0; j < matrix.length; j++){ //Столбцы
-                        if (checkAvailableCell(i - 2 - matrix.length, j, matrix)){//Ищем свободную ячейку
-                            matrix[j][i - 2 - matrix.length] = getAISymbol();
-                            return true;
-                        }
-                    }
+            }
+        }
+        else if (i == 1){ //Проверяем обратную диагоняль
+            for (int j = 0; j < matrix.length; j++){//Ищем свободную ячейку
+                if (checkAvailableCell(j, matrix.length - j - 1, matrix)){
+                    matrix[j][matrix.length - j - 1] = getAISymbol();
+                    return true;
+                }
+            }
+        }
+        else if (i < 2 + matrix.length){ //Строки
+            for (int j = 0; j < matrix[i - 2].length; j++){//Ищем свободную ячейку
+                if (checkAvailableCell(j,i - 2, matrix)){
+                    matrix[i - 2][j] = getAISymbol();
+                    return true;
+                }
+            }
+        }
+        else{
+            for (int j = 0; j < matrix.length; j++){ //Столбцы
+                if (checkAvailableCell(i - 2 - matrix.length, j, matrix)){//Ищем свободную ячейку
+                    matrix[j][i - 2 - matrix.length] = getAISymbol();
+                    return true;
                 }
             }
         }
