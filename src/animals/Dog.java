@@ -1,20 +1,17 @@
 package animals;
 
 public class Dog extends Animal {
-    private static int createdDogs = 0;
+
     public Dog(){
         super();
-        createdDogs++;
     }
 
     public Dog(String name){
         super(name, 500, 10);
-        createdDogs++;
     }
 
     public Dog(String name, int runningDistance, int swimmingDistance){
         super(name, runningDistance, swimmingDistance);
-        createdDogs++;
     }
 
     @Override
@@ -25,10 +22,6 @@ public class Dog extends Animal {
     @Override
     public void print(){
         System.out.println(this.toString());
-    }
-
-    public static int getCreatedDogs(){
-        return createdDogs;
     }
 
 }

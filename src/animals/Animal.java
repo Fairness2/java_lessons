@@ -5,14 +5,10 @@ public abstract class Animal {
     protected String name;
     protected int runningDistance;
     protected int swimmingDistance;
-    private static int createdAnimals = 0;
 
-    public Animal(){
-        createdAnimals++;
-    }
+    public Animal(){ }
 
     public Animal(String name, int runningDistance, int swimmingDistance){
-        createdAnimals++;
         this.name = name;
         this.runningDistance = runningDistance;
         this.swimmingDistance = swimmingDistance;
@@ -63,10 +59,6 @@ public abstract class Animal {
 
     public void setSwimmingDistance(int swimmingDistance) {
         this.swimmingDistance = swimmingDistance;
-    }
-
-    public static int getCreatedAnimals(){
-        return createdAnimals;
     }
 
     @Override
