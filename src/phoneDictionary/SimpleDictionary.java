@@ -22,33 +22,14 @@ public class SimpleDictionary implements PhoneDictionary{
     }
 
     @Override
-    public String get(String surname){
+    public String[] get(String surname){
         if (items.containsKey(surname)){
             LinkedHashSet<String> item = items.get(surname);
 
-            if (item.size() == 1){
-
-            }
-
-            StringBuilder sb = new StringBuilder();
-            for (String phone: item) {
-                if (sb.isEmpty()){
-                    if (item.size() == 1){
-                        sb.append(String.format("Номер %s: %s", surname, phone));
-                    }
-                    else {
-                        sb.append(String.format("Номера %s: %s", surname, phone));
-                    }
-                }
-                else {
-                    sb.append(String.format(", %s", phone));
-                }
-            }
-            return sb.toString();
-
+            return item.toArray(new String[item.size()]);
         }
         else{
-            return String.format("%s не имеет номеров в справочнике", surname);
+            return new String[0];
         }
     }
 

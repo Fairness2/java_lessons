@@ -49,10 +49,33 @@ public class Eleventh {
         }
 
         System.out.println("Номера телефонов пользователей:");
-        System.out.println(dict.get("Петров"));
-        System.out.println(dict.get("Елисеева"));
-        System.out.println(dict.get("Артемьев"));
-        System.out.println(dict.get("Несуществующий"));
+        printPhones("Петров", dict.get("Петров"));
+        printPhones("Елисеева", dict.get("Елисеева"));
+        printPhones("Артемьев", dict.get("Артемьев"));
+        printPhones("Несуществующий", dict.get("Несуществующий"));
+    }
+
+    private static void printPhones(String surname, String[] phones){
+        StringBuilder sb = new StringBuilder();
+
+        if (phones.length == 0) {
+            System.out.printf("%s не имеет номеров в справочнике", surname);
+        }
+
+        for (String phone: phones) {
+            if (sb.isEmpty()){
+                if (phones.length == 1){
+                    sb.append(String.format("Номер %s: %s", surname, phone));
+                }
+                else {
+                    sb.append(String.format("Номера %s: %s", surname, phone));
+                }
+            }
+            else {
+                sb.append(String.format(", %s", phone));
+            }
+        }
+        System.out.println(sb.toString());
     }
 
 }
