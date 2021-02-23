@@ -26,33 +26,22 @@ public abstract class IO {
         this.outStream = outStream;
     }
 
-    protected void waitMessage(){
+    protected void waitMessage() throws IOException{
         while (true){
-            try {
-                System.out.printf("Входящее сообщение: %s%n", inStream.readUTF());
-            }
-            catch (IOException e){
-                System.out.println("Соединение закрыто");
-                return;
-            }
+            processIncomingMessage(inStream.readUTF().trim());
         }
     }
 
-    protected void sendMessage(){
-        Scanner scanner = new Scanner(System.in);
-        while (true){
-            System.out.println("Введите сообщение...");
-            try {
-                String message = scanner.nextLine().trim();
-                if (!message.isEmpty()){
-                    outStream.writeUTF(message);
-                }
-            }
-            catch (IOException e){
-                System.out.println("Соединение закрыто");
-                scanner.close();
-                return;
-            }
+    protected abstract void processIncomingMessage(String string) throws IOException;
+
+    public void sendMessage(String message) throws IOException{
+        try {
+            outStream.writeUTF(message);
+        }
+        catch (IOException e){
+            System.out.println("Client unavailable");
+            e.printStackTrace();
+            throw new IOException(e.getMessage(), e);
         }
     }
 }
