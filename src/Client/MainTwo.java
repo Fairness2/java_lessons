@@ -2,6 +2,6 @@ package Client;
 
 public class MainTwo {
     public static void main(String[] args) {
-        Client client = new Client();
+        new ClientAdapter("localhost", 8000);
     }
 }

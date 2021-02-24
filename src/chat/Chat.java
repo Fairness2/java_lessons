@@ -7,22 +7,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.function.Consumer;
 
 public class Chat extends JFrame {
     private JPanel chatPanel;
     private JTextField messageTextField;
     private JScrollPane scrollPane;
 
-    public Chat(){
+    public Chat(Consumer<String> consumer){
         setTitle("Чат");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        createWindow();
+        createWindow(consumer);
         setVisible(true);
         setBounds(50, 50, 300, 500);
     }
 
 
-    private void createWindow(){
+    private void createWindow(Consumer<String> consumer){
         setLayout(new BorderLayout());
 
         chatPanel = new JPanel();
@@ -34,9 +35,9 @@ public class Chat extends JFrame {
 
         JPanel messagePanel = new JPanel(new BorderLayout());
         messageTextField = new JTextField();
-        messageTextField.addKeyListener(new MessageSendListener());
+        messageTextField.addKeyListener(new MessageSendListener(consumer));
         JButton messageSendButton = new JButton("Отправить");
-        messageSendButton.addActionListener(new MessageSendListener());
+        messageSendButton.addActionListener(new MessageSendListener(consumer));
         messagePanel.add(messageTextField, BorderLayout.CENTER);
         messagePanel.add(messageSendButton, BorderLayout.EAST);
         add(messagePanel, BorderLayout.SOUTH);
@@ -57,7 +58,21 @@ public class Chat extends JFrame {
         add(menu, BorderLayout.NORTH);
     }
 
+    public void showMessage (String message, boolean selfMessage) {
+        JPanel messagePanel = new JPanel(new BorderLayout());
+        JLabel messageLabel = new JLabel(message, !selfMessage ? SwingConstants.LEFT : SwingConstants.RIGHT);
+        messagePanel.add(messageLabel, !selfMessage ? BorderLayout.WEST : BorderLayout.EAST);
+        chatPanel.add(messagePanel);
+        scrollPane.validate();
+    }
+
     private class MessageSendListener implements ActionListener, KeyListener {
+
+        private Consumer<String> consumer;
+
+        public MessageSendListener(Consumer<String> consumer) {
+            this.consumer = consumer;
+        }
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -80,12 +95,7 @@ public class Chat extends JFrame {
         private void processAction(){
             String messageText = messageTextField.getText();
             messageTextField.setText(null);
-            boolean evenChildren = chatPanel.getComponentCount() % 2 == 0;
-            JPanel messagePanel = new JPanel(new BorderLayout());
-            JLabel message = new JLabel(messageText, evenChildren ? SwingConstants.LEFT : SwingConstants.RIGHT);
-            messagePanel.add(message, evenChildren ? BorderLayout.WEST : BorderLayout.EAST);
-            chatPanel.add(messagePanel);
-            scrollPane.validate();
+            consumer.accept(messageText);
         }
     }
 
