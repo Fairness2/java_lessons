@@ -7,11 +7,15 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ClientHandler extends IO {
     private final Server server;
     private final Socket clientSocket;
     private User user;
+    private final Thread runedThred;
+    private Timer authTimer;
 
     public ClientHandler(Server server, Socket clientSocket) throws IOException {
         try {
@@ -19,15 +23,19 @@ public class ClientHandler extends IO {
             this.clientSocket = clientSocket;
             setInStream(new DataInputStream(clientSocket.getInputStream()));
             setOutStream(new DataOutputStream(clientSocket.getOutputStream()));
-            new Thread(() -> {
+            runedThred = new Thread(() -> {
                 try {
                     run();
                 }
                 catch (IOException e){
                     server.unsubscribe(this);
+                    if (user != null) {
+                        server.broadcast(String.format("Пользователь %s вышел в чат%n", user.getName()));
+                    }
                     throw new RuntimeException(e.getMessage(), e);
                 }
-            }).start();
+            });
+            runedThred.start();
 
         }
         catch (IOException | RuntimeException e){
@@ -41,7 +49,15 @@ public class ClientHandler extends IO {
     }
 
     protected void auth() throws IOException{
+        if (user != null) {
+            user = null;
+        }
         sendMessage("Авторизуйтесь...");
+        if (authTimer != null) {
+            authTimer.cancel();
+        }
+        authTimer = new Timer();
+        authTimer.schedule(new DestroyTask(), 120000);
         while (true) {
             String input = getInStream().readUTF();
             if (input.startsWith("-auth")){
@@ -50,10 +66,11 @@ public class ClientHandler extends IO {
                     User user = server.getAuthService().findByCredentials(credentials[1], credentials[2]);
                     if (user != null){
                         if (server.isLoginAvailable(user.getLogin())) {
+                            authTimer.cancel();
                             this.user = user;
                             server.broadcast(String.format("Пользователь %s вошёл в чат%n", user.getName()));
                             server.subscribe(this);
-                            sendMessage("Вы авторизованы");
+                            sendMessage(String.format("-auth %s", user.getName()));
                             return;
                         }
                         else {
@@ -95,11 +112,35 @@ public class ClientHandler extends IO {
         }
         else if (message.startsWith("-close")) {
             server.unsubscribe(this);
-            sendMessage("Вы деавторизованы");
+            server.broadcast(String.format("Пользователь %s вышел в чат%n", user.getName()));
+            sendMessage("-close");
             auth();
         }
         else {
             server.broadcast(String.format("%s: %s", user.getName(), message));
+        }
+    }
+
+    private class DestroyTask extends TimerTask {
+        @Override
+        public void run() {
+            if (user == null) {
+                try {
+                    sendMessage("Вы бездействовали слишком долго, сервер разрывает соединение");
+                }
+                catch (IOException e) {
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                }
+
+                try {
+                    clientSocket.close(); //По идее должно завершить всё остальное, потмоу что потоки данных будут прекращщены
+                }
+                catch (IOException e) {
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
